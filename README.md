@@ -1,5 +1,7 @@
 # World-of-gifs
 
+1. Реализация навишации через Navigation component
+2. Добавление ViewModel
 
 
 
