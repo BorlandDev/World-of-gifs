@@ -1,4 +1,4 @@
-package viewModels
+package com.borlanddev.world_of_gifs.viewModels
 
 import androidx.lifecycle.ViewModel
 
