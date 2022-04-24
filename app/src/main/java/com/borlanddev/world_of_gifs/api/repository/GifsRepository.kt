@@ -8,9 +8,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
+private const val TAG ="Repository"
+
 object GifsRepository {
 
-    fun getGifs(
+
+ fun getGifs(
         apikey: String,
         onSuccess: (List<Gif>) -> Unit,
         onFailure: (msg: String) -> Unit,
@@ -37,5 +40,6 @@ object GifsRepository {
         })
     }
 }
+
 
 
