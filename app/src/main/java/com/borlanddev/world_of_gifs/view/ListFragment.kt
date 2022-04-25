@@ -10,7 +10,6 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.borlanddev.world_of_gifs.R
@@ -29,14 +28,11 @@ class ListFragment: Fragment(R.layout.fragment_list) {
 
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        findNavController().navigate(R.id.action_listFragment_to_detailsFragment2)
-
-
         gifsRecyclerView = view.findViewById(R.id.recycler_view)
+
         // Конфигурируем recycler отображать данные в виде таблицы
         gifsRecyclerView.layoutManager = GridLayoutManager(context, 3)
 
@@ -59,47 +55,44 @@ class ListFragment: Fragment(R.layout.fragment_list) {
 
 
     // Выполняем запрос на сервер
-  //  listViewModel.getGifs(resources.getString(R.string.api_key))
+    //  listViewModel.getGifs(resources.getString(R.string.api_key))
 
     }
 
 
 
 
-
-
-
+    // Холдер - ячейка (визуальный элемент списка, контейнер для наших данных)
     private class GifHolder (view: View): RecyclerView.ViewHolder(view),
             View.OnClickListener{
 
         private lateinit var gif: Gif
-
-        private var gifView = itemView.findViewById<ImageView>(R.id.gifImageView)
+        private val gifView = itemView.findViewById<ImageView>(R.id.gifImageView)
 
 
         init { // ставим слушателя на каждую вьюшку вьюХолдера
             itemView.setOnClickListener (this)
         }
 
+        // связываем данные с вью
         fun bind(gif: Gif) {
+            this.gif = gif
 
             val url = gif.url?.get(position)
 
-            Glide.with(itemView.context)
+            // загрузка гифки в нашу вьюшку
+            Glide.with(itemView.context) // FragmentActivity тоже можно передать
                 .asGif()
                 .load(url)
                 .into(gifView)
-
-        }
+            }
 
 
         override fun onClick(v: View?) {
 
+            // кладем информацию о выбранной гифке
             val bundle = Bundle()
-            val gifUrl = gif.url
-
-            bundle.putSerializable("gifUrl", gifUrl)
-
+            bundle.putSerializable("gifUrl", gif.url)
 
             // Передать в аргументах выбранную гифку
             v?.findNavController()?.navigate(
@@ -109,28 +102,28 @@ class ListFragment: Fragment(R.layout.fragment_list) {
     }
 
 
+
+
     private class GifAdapter(private val gifs: List<Gif>): RecyclerView.Adapter<GifHolder>() {
 
+        // функция отвечает за создание вьюХолдера на дисплее
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifHolder {
 
-            val view: View = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_list, parent, false)
-
-
-            return GifHolder(view)
+            // передали макет для каждой однотипной вью в ресайклере
+            return GifHolder(LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_list, parent, false))
         }
 
-
+        // recycler узнает заранее сколько элементов ему нужно будет отобразить
         override fun getItemCount(): Int = gifs.size
-
 
 
         override fun onBindViewHolder(holder: GifHolder, position: Int) {
 
-        val gif = gifs[position]
+            val gif = gifs[position]
 
+            // передаем информацию о выбранной гифке по ее позиции
             holder.bind(gif)
-
         }
     }
 
