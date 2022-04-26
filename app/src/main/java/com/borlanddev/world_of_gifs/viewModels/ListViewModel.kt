@@ -26,7 +26,7 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
             gifsListLiveData.value = it    // Если ответ успешный, полученные данные кладем в LiveData
         }, {
             Log.d(TAG, "FAILURE LOAD $it")
-        }, limit = 25)
+        }, limit = 60, offset = 4)
     }
 
 

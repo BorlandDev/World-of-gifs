@@ -12,8 +12,10 @@ interface GifsAPI {
     @GET("trending")
     fun fetchGifs(
         @Query( "api_key") apiKey: String,
-        @Query("limit") limit: Int = 25,
+        @Query("limit") pageSize: Int = 25,
+        @Query("offset") pageIndex: Int = 3,
         @Query("rating") rating: String = "g"
+
 
     ): Call<GifResponse>
 
