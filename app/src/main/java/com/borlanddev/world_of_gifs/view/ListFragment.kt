@@ -1,6 +1,5 @@
 package com.borlanddev.world_of_gifs.view
 
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.borlanddev.world_of_gifs.R
 import com.borlanddev.world_of_gifs.model.Gif
-import com.borlanddev.world_of_gifs.viewModels.ListViewModel
+import com.borlanddev.world_of_gifs.viewModel.ListViewModel
 import com.bumptech.glide.Glide
 
 private const val TAG = "ListFragment"
@@ -24,7 +23,6 @@ class ListFragment: Fragment(R.layout.fragment_list) {
     private lateinit var gifsRecyclerView: RecyclerView
 
     private val listViewModel by viewModels<ListViewModel>()
-
 
 
 
@@ -47,15 +45,11 @@ class ListFragment: Fragment(R.layout.fragment_list) {
 
             // Временно выводим ответ сервера в лог
             it.forEachIndexed { index, gif ->
-                Log.d(TAG, "ITEM $index ${gif.title}")
-
+                Log.d(TAG, "ITEM $index ${gif.images}")
 
             }
         }
 
-
-    // Выполняем запрос на сервер
-    //  listViewModel.getGifs(resources.getString(R.string.api_key))
 
     }
 
@@ -64,7 +58,7 @@ class ListFragment: Fragment(R.layout.fragment_list) {
 
     // Холдер - ячейка (визуальный элемент списка, контейнер для наших данных)
     private class GifHolder (view: View): RecyclerView.ViewHolder(view),
-            View.OnClickListener{
+        View.OnClickListener{
 
         private lateinit var gif: Gif
         private val gifView = itemView.findViewById<ImageView>(R.id.gifImageView)
@@ -78,25 +72,26 @@ class ListFragment: Fragment(R.layout.fragment_list) {
         fun bind(gif: Gif) {
             this.gif = gif
 
-            val url = gif.url?.get(position)
+            val url = gif.images?.downsized?.url ?: ""
 
             // загрузка гифки в нашу вьюшку
             Glide.with(itemView.context) // FragmentActivity тоже можно передать
                 .asGif()
+                .placeholder(R.drawable.bill_up_close)
                 .load(url)
                 .into(gifView)
-            }
+        }
 
 
         override fun onClick(v: View?) {
 
             // кладем информацию о выбранной гифке
             val bundle = Bundle()
-            bundle.putSerializable("gifUrl", gif.url)
+            bundle.putSerializable("gifUrl", gif.images?.downsized?.url ?: "")
 
-            // Передать в аргументах выбранную гифку
+            // Передаем в аргументах выбранную гифку
             v?.findNavController()?.navigate(
-                R.id.action_listFragment_to_detailsFragment2,
+                R.id.action_listFragment_to_detailsFragment,
                 bundle)
         }
     }
@@ -104,14 +99,16 @@ class ListFragment: Fragment(R.layout.fragment_list) {
 
 
 
-    private class GifAdapter(private val gifs: List<Gif>): RecyclerView.Adapter<GifHolder>() {
+    private inner class GifAdapter(private val gifs: List<Gif>): RecyclerView.Adapter<GifHolder>() {
 
         // функция отвечает за создание вьюХолдера на дисплее
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifHolder {
 
             // передали макет для каждой однотипной вью в ресайклере
-            return GifHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_list, parent, false))
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_list, parent, false) as ImageView
+
+            return GifHolder(view)
         }
 
         // recycler узнает заранее сколько элементов ему нужно будет отобразить
@@ -133,4 +130,3 @@ class ListFragment: Fragment(R.layout.fragment_list) {
 
 
 }
-

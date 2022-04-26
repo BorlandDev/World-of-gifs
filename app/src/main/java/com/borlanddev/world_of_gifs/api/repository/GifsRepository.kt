@@ -7,13 +7,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
-private const val TAG ="Repository"
-
 object GifsRepository {
 
 
- fun getGifs(
+    fun getGifs(
         apikey: String,
         onSuccess: (List<Gif>) -> Unit,
         onFailure: (msg: String) -> Unit,
@@ -21,8 +18,8 @@ object GifsRepository {
     ) {
 
 
-     // Call.enqueue выполняет веб-запрос в фоновом потоке.
-     // Обьект Callback позволяет определить что мы хотим сделать после получения ответа на запрос.
+        // Call.enqueue выполняет веб-запрос в фоновом потоке.
+        // Обьект Callback позволяет определить что мы хотим сделать после получения ответа на запрос.
 
         RetrofitClient.gifsAPI.fetchGifs(apikey, limit).enqueue(object: Callback<GifResponse> {
 
@@ -40,6 +37,5 @@ object GifsRepository {
         })
     }
 }
-
 
 

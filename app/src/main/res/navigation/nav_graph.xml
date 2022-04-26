@@ -9,12 +9,12 @@
         android:name="com.borlanddev.world_of_gifs.view.ListFragment"
         android:label="ListFragment" >
         <action
-            android:id="@+id/action_listFragment_to_detailsFragment2"
+            android:id="@+id/action_listFragment_to_detailsFragment"
             app:destination="@id/detailsFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/nav_graph" />
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"

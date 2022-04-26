@@ -6,10 +6,8 @@ import android.view.View
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
 import com.borlanddev.world_of_gifs.R
 import com.borlanddev.world_of_gifs.viewModels.DetailsViewModel
-import com.borlanddev.world_of_gifs.viewModels.ListViewModel
 import com.bumptech.glide.Glide
 
 class DetailsFragment: Fragment(R.layout.fragment_details) {
@@ -23,17 +21,15 @@ class DetailsFragment: Fragment(R.layout.fragment_details) {
 
         val gifFullScreen = view.findViewById<ImageView>(R.id.gifFullScreen)
 
-
         val gifUrl = arguments?.getSerializable("gifUrl")
 
-        Glide.with(view.context)
+        // Отображаем гифку по выбранную пользователем
+        Glide.with(this)
             .asGif()
             .load(gifUrl)
-            .centerCrop()
+            .placeholder(R.drawable.bill_up_close)
             .into(gifFullScreen)
-        }
-
+    }
 
 
 }
-
