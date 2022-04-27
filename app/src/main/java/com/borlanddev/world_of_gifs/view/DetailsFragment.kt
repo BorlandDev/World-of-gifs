@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 
 class DetailsFragment: Fragment(R.layout.fragment_details) {
 
-
     private val detailsViewModel by viewModels<DetailsViewModel>()
 
 
@@ -21,6 +20,7 @@ class DetailsFragment: Fragment(R.layout.fragment_details) {
 
         val gifFullScreen = view.findViewById<ImageView>(R.id.gifFullScreen)
 
+        // Получаем url из аргументов фрагмента
         val gifUrl = arguments?.getSerializable("gifUrl")
 
         // Отображаем гифку по выбранную пользователем

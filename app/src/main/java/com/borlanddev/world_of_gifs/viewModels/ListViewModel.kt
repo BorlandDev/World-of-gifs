@@ -14,7 +14,7 @@ private const val TAG = "ListViewModel"
 class ListViewModel(application: Application): AndroidViewModel(application) {
 
 
-    val gifsListLiveData = MutableLiveData<List<Gif>>(listOf())
+     val gifsListLiveData = MutableLiveData<List<Gif>>(listOf())
 
     init {
 
