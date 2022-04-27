@@ -1,4 +1,4 @@
-package com.borlanddev.world_of_gifs.viewModel
+package com.borlanddev.world_of_gifs.viewModels
 
 import android.app.Application
 import android.util.Log
