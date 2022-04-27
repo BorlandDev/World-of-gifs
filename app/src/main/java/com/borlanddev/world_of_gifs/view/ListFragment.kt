@@ -1,6 +1,7 @@
 package com.borlanddev.world_of_gifs.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,8 +42,10 @@ class ListFragment: Fragment(R.layout.fragment_list) {
             // Обновляем данные в ресайклере
             gifsRecyclerView.adapter = GifAdapter(it)
 
+
+            }
         }
-    }
+
 
 
     // Холдер - ячейка (визуальный элемент списка, контейнер для наших данных)

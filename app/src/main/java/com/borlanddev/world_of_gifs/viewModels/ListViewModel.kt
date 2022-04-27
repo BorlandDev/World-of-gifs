@@ -13,22 +13,31 @@ private const val TAG = "ListViewModel"
 
 class ListViewModel(application: Application): AndroidViewModel(application) {
 
-
-     val gifsListLiveData = MutableLiveData<List<Gif>>(listOf())
+    val gifsListLiveData = MutableLiveData<List<Gif>>(listOf())
 
     init {
 
-        // Выполняем запрос на сервер
+        if (gifsListLiveData.value!!.isEmpty())
+            getGifs(application)
+
+
+    }
+
+
+
+    // Выполняем запрос на сервер
+    private fun getGifs(application: Application) {
 
         // Предоставляем реализацию поведения функций в UI-потоке, после ответа на запрос (в фоновом)
         GifsRepository.getGifs(application.resources.getString(R.string.api_key), {
 
             gifsListLiveData.value = it    // Если ответ успешный, полученные данные кладем в LiveData
-        }, {
-            Log.d(TAG, "FAILURE LOAD $it")
-        }, limit = 25)
-    }
+        },
+            { Log.d(TAG, "FAILURE LOAD $it") },
 
+            limit = 25)
+
+    }
 
 }
 
