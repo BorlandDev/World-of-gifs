@@ -1,6 +1,9 @@
 package com.borlanddev.world_of_gifs.api.repository
 
-import android.nfc.tech.MifareUltralight.PAGE_SIZE
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations.map
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -19,28 +22,33 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val TAG = "GifsRepository"
+
+
 class GifsRepository(
     private val ioDispatcher: CoroutineDispatcher
 ) : PageRepository {
 
-
-    private val enableErrorsFlow = MutableStateFlow(false)
-
-    override fun isErrorsEnabled(): Flow<Boolean> = enableErrorsFlow
-
-    override fun serErrorsEnabled(value: Boolean) {
-        enableErrorsFlow.value = value
-    }
+    // Для симуляции ошибок
 
 
+    //  private val enableErrorsFlow = MutableStateFlow(false)
+
+//    override fun isErrorsEnabled(): Flow<Boolean> = enableErrorsFlow
+//
+//    override fun serErrorsEnabled(value: Boolean) {
+//        enableErrorsFlow.value = value
+//    }
 
 
 
 
+    // Конфигурируем пэйджер. Логика работы пагинации. Так же мы будем в дальнейшем прослушивать Flow.
     override fun getPageGif(): Flow<PagingData<Gif>> {
 
+        // Создаем загрузчик
         val loader: GifPageLoader = { pageIndex, pageSize ->
-            getGif(pageIndex, pageSize)
+            getGif(pageIndex = 4, pageSize = 60, apikey = "")
         }
 
         return Pager(
@@ -49,26 +57,51 @@ class GifsRepository(
                 enablePlaceholders = true
             ),
 
+            // Принимает фабрику и создает ее в случае невалидности текущего источника данных.
             pagingSourceFactory = { GifPagingSource(loader, PAGE_SIZE) }
         ).flow
     }
 
 
-    private suspend fun getGif(pageIndex: Int, pageSize: Int): List<Gif> =
+    private suspend fun getGif( apikey: String,
+        pageIndex: Int, pageSize: Int): MutableLiveData<List<Gif>> =
+
         withContext(ioDispatcher) {
 
             delay(2000)
 
-            if (enableErrorsFlow.value) throw IllegalStateException("Error!")
+          //  if (enableErrorsFlow.value) throw IllegalStateException("Error!")
 
-            val offset = pageIndex * pageSize
+            val gifsListLiveData = MutableLiveData<List<Gif>>(listOf())
 
-            // get page
-            val list = RetrofitClient.gifsAPI.fetchGifs(offset, pageSize)
+            val list = RetrofitClient.gifsAPI.fetchGifs()
+                    .enqueue(object : Callback<GifResponse> {
+
+                override fun onResponse(call: Call<GifResponse>, response: Response<GifResponse>) {
+
+
+
+                    if (response.code() == 200) {
+                        // в случае успешного ответа от сервера , получаем данные если они есть
+                        val giphyResponse  = (response.body()?.data ?: listOf())
+                        val itemsGif: List<Gif> = giphyResponse
+
+                        return gifsListLiveData.value
+                    }
+                }
+
+
+                override fun onFailure(call: Call<GifResponse>, t: Throwable) {
+                    Log.d(TAG, "FAILURE LOAD ${t.localizedMessage} ?: $t")
+                }
+
+
+                    })
+
 
 
             return@withContext list
-                .map(::)
+                .map(Call<Response>::MutableLiveData<List<Gif>>)
         }
 
 
@@ -92,7 +125,7 @@ class GifsRepository(
         // Call.enqueue выполняет веб-запрос в фоновом потоке.
         // Обьект Callback позволяет определить что мы хотим сделать после получения ответа на запрос.
 
-        RetrofitClient.gifsAPI.fetchGifs(apikey, pageSize).enqueue(object : Callback<GifResponse> {
+        RetrofitClient.gifsAPI.fetchGifs(apikey, pageSize, pageIndex).enqueue(object : Callback<GifResponse> {
 
             override fun onResponse(call: Call<GifResponse>, response: Response<GifResponse>) {
 

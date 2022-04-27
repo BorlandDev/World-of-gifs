@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.borlanddev.world_of_gifs.R
 import com.borlanddev.world_of_gifs.model.Gif
-import com.borlanddev.world_of_gifs.viewModel.ListViewModel
+import com.borlanddev.world_of_gifs.viewModels.ListViewModel
 import com.bumptech.glide.Glide
 
 private const val TAG = "ListFragment"

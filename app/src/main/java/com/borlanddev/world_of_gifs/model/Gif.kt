@@ -5,7 +5,7 @@ data class GifResponse(val data: List<Gif>?)
 
 
 // Десериализуем JSON-objects
-data class Gif (val images: Images?)
+data class Gif (val images: Images?)      // UserDbEntity (User с этим классом уже везде работают)
 
 data class Images(val downsized: DownSized?)
 

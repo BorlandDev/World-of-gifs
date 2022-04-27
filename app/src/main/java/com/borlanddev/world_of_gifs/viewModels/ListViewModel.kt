@@ -1,4 +1,4 @@
-package com.borlanddev.world_of_gifs.viewModel
+package com.borlanddev.world_of_gifs.viewModels
 
 import android.app.Application
 import android.util.Log
@@ -18,15 +18,7 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
 
     init {
 
-        // Выполняем запрос на сервер
 
-        // Предоставляем реализацию поведения функций в UI-потоке, после ответа на запрос (в фоновом)
-        GifsRepository.getGifs(application.resources.getString(R.string.api_key), {
-
-            gifsListLiveData.value = it    // Если ответ успешный, полученные данные кладем в LiveData
-        }, {
-            Log.d(TAG, "FAILURE LOAD $it")
-        }, limit = 60, offset = 4)
     }
 
 

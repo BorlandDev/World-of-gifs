@@ -6,10 +6,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface PageRepository {
 
-    fun isErrorsEnabled(): Flow<Boolean>
 
 
-    fun serErrorsEnabled(value: Boolean)
+    // Для симуляции ошибок
+
+  //fun isErrorsEnabled(): Flow<Boolean>
+
+
+  //  fun serErrorsEnabled(value: Boolean)
 
 
     fun getPageGif(): Flow<PagingData<Gif>>

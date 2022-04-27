@@ -10,13 +10,13 @@ interface GifsAPI {
 
     // Конечная точка запроса
     @GET("trending")
-    fun fetchGifs(
-        @Query( "api_key") apiKey: String,
-        @Query("limit") pageSize: Int = 25,
-        @Query("offset") pageIndex: Int = 3,
+    fun fetchGifs(                                         // getUsers
+        @Query( "api_key") apiKey: String = "",
+        @Query("offset") pageIndex: Int = 4,
+        @Query("limit") pageSize: Int = 60,
         @Query("rating") rating: String = "g"
 
 
-    ): Call<GifResponse>
+    ): Call<GifResponse>                                    // List<UserDbEntity>
 
 }
