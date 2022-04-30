@@ -72,7 +72,7 @@ class ListFragment: Fragment(R.layout.fragment_list) {
             val url = gif.images?.downsized?.url ?: ""
 
 
-            
+
             // загрузка гифки в нашу вьюшку
             Glide.with(itemView.context) // FragmentActivity тоже можно передать
                 .asGif()
