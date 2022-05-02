@@ -1,7 +1,6 @@
 package com.borlanddev.world_of_gifs.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,11 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.borlanddev.world_of_gifs.R
-import com.borlanddev.world_of_gifs.databinding.FragmentDetailsBinding
 import com.borlanddev.world_of_gifs.databinding.FragmentListBinding
-import com.borlanddev.world_of_gifs.databinding.ItemListBinding
 import com.borlanddev.world_of_gifs.model.Gif
 import com.borlanddev.world_of_gifs.viewModels.ListViewModel
 import com.bumptech.glide.Glide
 
-private const val TAG = "ListFragment"
 
 class ListFragment: Fragment(R.layout.fragment_list) {
 
@@ -27,12 +23,20 @@ class ListFragment: Fragment(R.layout.fragment_list) {
     private val listViewModel by viewModels<ListViewModel>()
 
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        binding = FragmentListBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        binding = FragmentListBinding.inflate(layoutInflater)
-        binding.root
 
 
         // Конфигурируем recycler отображать данные в виде таблицы
@@ -40,14 +44,12 @@ class ListFragment: Fragment(R.layout.fragment_list) {
 
 
         // Наблюдаем за данными
-        listViewModel.gifsListLiveData.observe(
+        listViewModel.gifListLivedata.observe(
             viewLifecycleOwner
         ) {
 
             // Обновляем данные в ресайклере
             binding.recyclerView.adapter = GifAdapter(it)
-
-
             }
         }
 
@@ -60,7 +62,6 @@ class ListFragment: Fragment(R.layout.fragment_list) {
         private lateinit var gif: Gif
         private val gifView = itemView.findViewById<ImageView>(R.id.gifImageView)
 
-
         init { // ставим слушателя на каждую вьюшку вьюХолдера
             itemView.setOnClickListener(this)
         }
@@ -72,15 +73,13 @@ class ListFragment: Fragment(R.layout.fragment_list) {
             val url = gif.images?.downsized?.url ?: ""
 
 
-
             // загрузка гифки в нашу вьюшку
             Glide.with(itemView.context) // FragmentActivity тоже можно передать
                 .asGif()
                 .placeholder(R.drawable.bill_up_close)
                 .load(url)
+                .onlyRetrieveFromCache(false)
                 .into(gifView)
-
-
 
         }
 
@@ -105,9 +104,6 @@ class ListFragment: Fragment(R.layout.fragment_list) {
 
         // функция отвечает за создание вьюХолдера на дисплее
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifHolder {
-
-//            val binding = ItemListBinding.inflate(layoutInflater)
-//            binding.root
 
             // передали макет для каждой однотипной вью в ресайклере
             val view = LayoutInflater.from(parent.context)
