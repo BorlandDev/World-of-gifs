@@ -17,17 +17,11 @@ class DetailsFragment: Fragment(R.layout.fragment_details) {
 
     lateinit var binding: FragmentDetailsBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentDetailsBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentDetailsBinding.bind(view)
 
         // Получаем url из аргументов фрагмента
         val gifUrl = arguments?.getSerializable("gifUrl")

@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.navOptions
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.borlanddev.world_of_gifs.R
@@ -23,21 +25,10 @@ class ListFragment: Fragment(R.layout.fragment_list) {
     private val listViewModel by viewModels<ListViewModel>()
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        binding = FragmentListBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
-
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = FragmentListBinding.bind(view)
 
         // Конфигурируем recycler отображать данные в виде таблицы
         binding.recyclerView.layoutManager = GridLayoutManager(context, 3)
@@ -87,14 +78,22 @@ class ListFragment: Fragment(R.layout.fragment_list) {
         override fun onClick(v: View?) {
 
             // кладем информацию о выбранной гифке
-            val bundle = Bundle()
-            bundle.putSerializable("gifUrl", gif.images?.downsized?.url ?: "")
+        //    val bundle = Bundle()
+          //  bundle.putSerializable("gifUrl", gif.images?.downsized?.url ?: "")
 
             // Передаем в аргументах выбранную гифку
             v?.findNavController()?.navigate(
                 R.id.action_listFragment_to_detailsFragment,
-                bundle
-            )
+                bundleOf("gifUrl" to (gif.images?.downsized?.url ?: "")),
+                    navOptions {
+                        anim {
+                            enter = R.anim.enter
+                            exit = R.anim.exit
+                            popEnter = R.anim.pop_enter
+                            popExit = R.anim.pop_exit
+                        }
+                    })
+
         }
     }
 
