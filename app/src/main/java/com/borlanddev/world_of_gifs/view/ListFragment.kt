@@ -28,6 +28,7 @@ class ListFragment: Fragment(R.layout.fragment_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Инициализация биндинга
         binding = FragmentListBinding.bind(view)
 
         // Конфигурируем recycler отображать данные в виде таблицы
@@ -76,10 +77,6 @@ class ListFragment: Fragment(R.layout.fragment_list) {
 
 
         override fun onClick(v: View?) {
-
-            // кладем информацию о выбранной гифке
-        //    val bundle = Bundle()
-          //  bundle.putSerializable("gifUrl", gif.images?.downsized?.url ?: "")
 
             // Передаем в аргументах выбранную гифку
             v?.findNavController()?.navigate(

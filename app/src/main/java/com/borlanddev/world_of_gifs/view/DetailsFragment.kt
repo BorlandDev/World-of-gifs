@@ -21,6 +21,7 @@ class DetailsFragment: Fragment(R.layout.fragment_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Инициализация биндинга
         binding = FragmentDetailsBinding.bind(view)
 
         // Получаем url из аргументов фрагмента

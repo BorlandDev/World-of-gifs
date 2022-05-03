@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.borlanddev.world_of_gifs.view.ListFragment"
-        android:label="fragment_list"
+        android:label="World gifs"
         tools:layout="@layout/fragment_list" >
         <action
             android:id="@+id/action_listFragment_to_detailsFragment"
@@ -16,6 +16,6 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.borlanddev.world_of_gifs.view.DetailsFragment"
-        android:label="fragment_details"
+        android:label="View GIF"
         tools:layout="@layout/fragment_details" />
 </navigation>
